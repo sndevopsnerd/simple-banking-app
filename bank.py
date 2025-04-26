@@ -9,8 +9,8 @@ class BankAccount:
         return self.balance
 
     def withdraw(self, amount):
-        if amount <= 0 or amount > self.balance:
-            raise ValueError("Invalid withdrawal amount.")
+        if amount <= 100 or amount > self.balance:
+            raise ValueError("Invalid withdrawal amount. Need at least 100")
         self.balance -= amount
         return self.balance
 
