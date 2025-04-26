@@ -3,14 +3,14 @@ class BankAccount:
         self.balance = 0
 
     def deposit(self, amount):
-        if amount <= 0:
-            raise ValueError("Deposit must be positive.")
+        if amount <= 50:
+            raise ValueError("Deposit at least 50.")
         self.balance += amount
         return self.balance
 
     def withdraw(self, amount):
-        if amount <= 100 or amount > self.balance:
-            raise ValueError("Invalid withdrawal amount. Need at least 100")
+        if amount <= 50 or amount > self.balance:
+            raise ValueError("Invalid withdrawal amount. Withdraw at least 50")
         self.balance -= amount
         return self.balance
 
