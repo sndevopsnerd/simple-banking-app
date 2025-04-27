@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the code from the repository using Jenkins' SCM configuration
+                // Checkout the code from the repository
                 checkout scm
             }
         }
@@ -17,14 +17,16 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing dependencies...'
-                sh 'echo "Simulated: pip install -r requirements.txt"'
+                // Assuming you have a requirements.txt file
+                sh 'pip install -r requirements.txt'
             }
         }
 
         stage('Run Tests') {
             steps {
-                echo 'Running tests...'
-                sh 'echo "Simulated: Running tests (e.g., pytest)"'
+                echo 'Running unit tests...'
+                // Run your unit tests with python -m unittest
+                sh 'python -m unittest discover -s tests'  // assuming tests are in the 'tests' directory
             }
         }
 
@@ -93,6 +95,11 @@ pipeline {
                 echo "Simulating deployment to PROD environment at ${PROD_SERVER}..."
                 sh 'echo "Simulated: Deploying to Prod environment"'
             }
+        }
+    }
+    post {
+        always {
+            echo 'Deployment pipeline completed.'
         }
     }
 }
