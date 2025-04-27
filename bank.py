@@ -4,7 +4,7 @@ class BankAccount:
 
     def deposit(self, amount):
         if amount <= 50:
-            raise ValueError("Please Deposit at least USD 50.")
+            raise ValueError("Please Deposit at least USD 50!")
         self.balance += amount
         return self.balance
 
