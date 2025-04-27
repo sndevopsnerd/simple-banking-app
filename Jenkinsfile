@@ -18,7 +18,6 @@ pipeline {
             steps {
                 script {
                     echo 'Installing dependencies...'
-                    // Simulating the installation of dependencies
                     sh 'echo "Simulated: pip install -r requirements.txt"'
                 }
             }
@@ -28,7 +27,6 @@ pipeline {
             steps {
                 script {
                     echo 'Running tests...'
-                    // Simulate running tests
                     sh 'echo "Simulated: Running tests (e.g., pytest)"'
                 }
             }
@@ -38,7 +36,6 @@ pipeline {
             steps {
                 script {
                     echo "Simulating deployment to DEV environment at ${DEV_SERVER}..."
-                    // Simulate deployment process
                     sh 'echo "Simulated: Deploying to Dev environment"'
                 }
             }
@@ -48,8 +45,32 @@ pipeline {
             steps {
                 script {
                     echo "Simulating deployment to TEST environment at ${TEST_SERVER}..."
-                    // Simulate deployment process
                     sh 'echo "Simulated: Deploying to Test environment"'
+                }
+            }
+        }
+
+        stage('ServiceNow Change Request') {
+            steps {
+                script {
+                    echo 'Creating and waiting for ServiceNow change request approval...'
+                    snDevOpsChange(changeRequestDetails: '''
+                    {
+                      "attributes": {
+                        "requested_by": {
+                          "name": "Test User"
+                        },
+                        "assignment_group": {
+                          "name": "Change Approval Team"
+                        },
+                        "priority": "2",
+                        "comments": "Requesting approval before Prod deployment.",
+                        "work_notes": "Auto-generated from Jenkins pipeline.",
+                        "start_date": "2025-04-27 11:00:00",
+                        "end_date": "2025-04-27 23:59:59"
+                      }
+                    }
+                    ''')
                 }
             }
         }
@@ -58,7 +79,6 @@ pipeline {
             steps {
                 script {
                     echo "Simulating deployment to PROD environment at ${PROD_SERVER}..."
-                    // Simulate deployment process
                     sh 'echo "Simulated: Deploying to Prod environment"'
                 }
             }
