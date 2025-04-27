@@ -44,12 +44,6 @@ pipeline {
             }
         }
 
-        stage('Approval for Test') {
-            steps {
-                input message: 'Approve deployment to TEST?', ok: 'Deploy to Test'
-            }
-        }
-
         stage('Deploy to Test') {
             steps {
                 script {
@@ -57,12 +51,6 @@ pipeline {
                     // Simulate deployment process
                     sh 'echo "Simulated: Deploying to Test environment"'
                 }
-            }
-        }
-
-        stage('Approval for Prod') {
-            steps {
-                input message: 'Approve deployment to PROD?', ok: 'Deploy to Prod'
             }
         }
 
@@ -86,4 +74,3 @@ pipeline {
         }
     }
 }
-
