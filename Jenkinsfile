@@ -86,4 +86,4 @@ pipeline {
         }
     }
 }
-git status
+
