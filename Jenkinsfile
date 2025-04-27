@@ -4,10 +4,12 @@ pipeline {
         DEV_SERVER = 'dev-server-placeholder'
         TEST_SERVER = 'test-server-placeholder'
         PROD_SERVER = 'prod-server-placeholder'
+        REPO_URL = 'https://github.com/sndevopsnerd/simple-banking-app' // Replace with your actual repository URL
     }
     stages {
         stage('Checkout') {
             steps {
+                // Checkout the code from the repository using Jenkins' SCM configuration
                 checkout scm
             }
         }
@@ -28,19 +30,26 @@ pipeline {
 
         stage('Deploy to Dev') {
             steps {
+                echo "Simulating deployment to DEV environment at ${DEV_SERVER}..."
+                sh 'echo "Simulated: Deploying to Dev environment"'
+            }
+        }
+
+        stage('Deploy to Test') {
+            steps {
                 script {
                     snDevOpsChange(
                         changeRequestDetails: '''{
                             "attributes": {
-                                "short_description": "Deploy to Dev",
-                                "priority": "3",
+                                "short_description": "Deploy to Test",
+                                "priority": "2",
                                 "start_date": "2025-04-27 08:00:00",
                                 "end_date": "2025-04-27 18:00:00",
-                                "justification": "Deploying new features to development environment",
-                                "description": "Deploying new features to development environment",
+                                "justification": "Deploying new features to test environment",
+                                "description": "Deploying new features to test environment",
                                 "cab_required": false,
                                 "comments": "This update is from Jenkins pipeline",
-                                "work_notes": "Deploying to Dev environment",
+                                "work_notes": "Deploying to Test environment",
                                 "assignment_group": "a715cd759f2002002920bde8132e7018"
                             },
                             "setCloseCode": false,
@@ -51,13 +60,6 @@ pipeline {
                         pollingInterval: 60
                     )
                 }
-                echo "Simulating deployment to DEV environment at ${DEV_SERVER}..."
-                sh 'echo "Simulated: Deploying to Dev environment"'
-            }
-        }
-
-        stage('Deploy to Test') {
-            steps {
                 echo "Simulating deployment to TEST environment at ${TEST_SERVER}..."
                 sh 'echo "Simulated: Deploying to Test environment"'
             }
@@ -93,9 +95,4 @@ pipeline {
             }
         }
     }
-    post {
-        always {
-            echo 'Deployment pipeline completed.'
-        }
-            }
 }
