@@ -60,7 +60,7 @@ pipeline {
                         pollingInterval: 60
                     )
                 }
-                echo "Simulating deployment to TEST environment at ${TEST_SERVER}..."
+                echo "Simulating deploy to TEST environment at ${TEST_SERVER}..."
                 sh 'echo "Simulated: Deploying to Test environment"'
             }
         }
