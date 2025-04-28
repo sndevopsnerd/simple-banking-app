@@ -10,7 +10,7 @@ class BankAccount:
 
     def withdraw(self, amount):
         if amount <= 50 or amount > self.balance:
-            raise ValueError("Invalid withdrawal amount! Please Withdraw a minimum of USD 50!")
+            raise ValueError("Invalid withdrawal amount! Please Withdraw a minimum of USD 50!!")
         self.balance -= amount
         return self.balance
 
