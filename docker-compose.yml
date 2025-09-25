@@ -9,15 +9,18 @@ services:
       - "50000:50000"
     volumes:
       - jenkins_home:/var/jenkins_home
+    networks:
+      - my-network
 
   ngrok:
     image: ngrok/ngrok:latest
     command: ["http", "jenkins:8080", "--authtoken=2wHAi5eELEoZtyYpfDYCjYMiFBE_mEMNX1xB5pPSANHGdVsP"]
-    environment:
-      - NGROK_HOST=jenkins
-      - NGROK_PORT=8080
-    ports:
-      - "4040:4040"
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
 
 volumes:
   jenkins_home:
