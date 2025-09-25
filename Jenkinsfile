@@ -65,5 +65,6 @@ pipeline {
             echo 'Pipeline failed. Notifying external service about the failure...'
             // Replace with your actual webhook URL
             sh 'curl -X POST "https://dev197804.service-now.com/api/sn_devops/v2/devops/tool/orchestration?toolId=5c1dd70cc3d0f6108ce8fc0ed40131fd"'
+        }
     }
 }
