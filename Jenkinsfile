@@ -53,20 +53,18 @@ pipeline {
         always {
             // This runs at the end of the build regardless of the outcome.
             echo 'Pipeline finished. Cleanup...'
-            // Example: Clean up temporary files or workspaces
-            // sh 'rm -rf build_artifacts'
         }
         success {
             // This runs only if the build succeeds.
             echo 'Pipeline succeeded. Notifying external service...'
             // Replace with your actual webhook URL
-            sh 'curl -X POST https://dev197804.service-now.com/api/sn_devops/v2/devops/tool/{code | plan | artifact | orchestration | test | softwarequality }?toolId=5c1dd70cc3d0f6108ce8fc0ed40131fd/success'
+            sh 'curl -X POST https://your-webhook-url/success'
         }
         failure {
             // This runs only if the build fails.
             echo 'Pipeline failed. Notifying external service about the failure...'
             // Replace with your actual webhook URL
-            sh 'curl -X POST https://dev197804.service-now.com/api/sn_devops/v2/devops/tool/{code | plan | artifact | orchestration | test | softwarequality }?toolId=5c1dd70cc3d0f6108ce8fc0ed40131fd/failure'
+            sh 'curl -X POST https://your-webhook-url/failure'
         }
     }
 }
