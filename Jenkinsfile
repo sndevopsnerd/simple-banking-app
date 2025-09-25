@@ -37,29 +37,6 @@ pipeline {
 
         stage('Deploy to Test') {
             steps {
-                script {
-                    snDevOpsChange(
-                        changeRequestDetails: '''{
-                            "attributes": {
-                                "short_description": "Deploy to Test",
-                                "priority": "2",
-                                "start_date": "2025-04-27 08:00:00",
-                                "end_date": "2025-04-27 18:00:00",
-                                "justification": "Deploying new features to test environment",
-                                "description": "Deploying new features to test environment",
-                                "cab_required": false,
-                                "comments": "This update is from Jenkins pipeline",
-                                "work_notes": "Deploying to Test environment",
-                                "assignment_group": "a715cd759f2002002920bde8132e7018"
-                            },
-                            "setCloseCode": false,
-                            "autoCloseChange": true
-                        }''',
-                        changeCreationTimeOut: 3600,
-                        changeStepTimeOut: 18000,
-                        pollingInterval: 60
-                    )
-                }
                 echo "Simulating deploy to TEST environment at ${TEST_SERVER}..."
                 sh 'echo "Simulated: Deploying to Test environment"'
             }
