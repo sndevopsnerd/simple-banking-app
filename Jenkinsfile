@@ -59,7 +59,7 @@ pipeline {
         
         stage('Deploy to Dev (Simulated)') {
             steps {
-                echo 'Simulating Deployment to Dev.....'
+                echo 'Simulating Deployment to Dev.......'
                 sh 'echo "Deployment successful"'
             }
         }
