@@ -48,17 +48,4 @@ pipeline {
             }
         }
     }
-    post {
-        always {
-            echo 'Pipeline finished. Cleanup...'
-        }
-        success {
-            echo 'Pipeline succeeded. Notifying external service...'
-            sh 'curl -X POST -H "Authorization: Bearer cRldpw5y51IhSZH5MZMWqSvHZg6YVXh7" "https://dev197804.service-now.com/api/sn_devops/v2/devops/tool/orchestration?toolId=5c1dd70cc3d0f6108ce8fc0ed40131fd"'
-        }
-        failure {
-            echo 'Pipeline failed. Notifying external service about the failure...'
-            sh 'curl -X POST -H "Authorization: Bearer cRldpw5y51IhSZH5MZMWqSvHZg6YVXh7" "https://dev197804.service-now.com/api/sn_devops/v2/devops/tool/orchestration?toolId=5c1dd70cc3d0f6108ce8fc0ed40131fd"'
-        }
-    }
-}
+}   
