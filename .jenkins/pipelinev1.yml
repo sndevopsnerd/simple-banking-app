@@ -1,0 +1,29 @@
+pipeline:
+  agent: any
+
+  environment:
+    DEV_SERVER: 'dev-server-placeholder'
+    TEST_SERVER: 'test-server-placeholder'
+    PROD_SERVER: 'prod-server-placeholder'
+    REPO_URL: 'https://github.com/sndevopsnerd/simple-banking-app'
+
+  stages:
+    - stage: Checkout
+      steps:
+        - echo: 'Checking out source code...'
+        - checkout: scm
+
+    - stage: Install Dependencies (Simulated)
+      steps:
+        - echo: 'Installing dependencies...'
+        - sh: 'echo "Simulated: pip install -r requirements.txt"'
+
+    - stage: Deploy to Dev (Simulated)
+      steps:
+        - echo: "Simulating deployment to DEV environment at ${env.DEV_SERVER}..."
+        - sh: 'echo "Simulated: Deploying to Dev environment"'
+
+    - stage: Deploy to Prod (Simulated)
+      steps:
+        - echo: "Simulating deployment to PRD environment at ${env.PROD_SERVER}..."
+        - sh: 'echo "Simulated: Deploying to Prod environment"'
