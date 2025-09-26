@@ -1,6 +1,5 @@
-version: '3.8'
-
 services:
+  # -------------------- JENKINS SERVICE --------------------
   jenkins:
     container_name: my-jenkins-container
     image: jenkins/jenkins:lts
@@ -9,18 +8,58 @@ services:
       - "50000:50000"
     volumes:
       - jenkins_home:/var/jenkins_home
+    environment:
+      # Fixes the 403 No Valid Crumb error by excluding the webhook path
+      - JENKINS_JAVA_OPTS=-Dhudson.security.csrf.CrumbExclusion=/github-webhook/
     networks:
       - my-network
 
+  # -------------------- NGROK SERVICE --------------------
   ngrok:
     image: ngrok/ngrok:latest
     command: ["http", "jenkins:8080", "--authtoken=2wHAi5eELEoZtyYpfDYCjYMiFBE_mEMNX1xB5pPSANHGdVsP"]
     networks:
       - my-network
+  
+  # -------------------- SONARQUBE DATABASE --------------------
+  sonarqube-db:
+    image: postgres:15-alpine
+    container_name: sonarqube-db
+    environment:
+      - POSTGRES_USER=sonar
+      - POSTGRES_PASSWORD=sonar
+      - POSTGRES_DB=sonar
+    volumes:
+      - sonarqube_db_data:/var/lib/postgresql/data
+    networks:
+      - my-network
+
+  # -------------------- SONARQUBE SERVER --------------------
+  sonarqube:
+    image: sonarqube:lts-community
+    container_name: sonarqube
+    ports:
+      - "9000:9000"
+    environment:
+      # SonarQube connection details to the database
+      - SONAR_JDBC_URL=jdbc:postgresql://sonarqube-db:5432/sonar
+      - SONAR_JDBC_USERNAME=sonar
+      - SONAR_JDBC_PASSWORD=sonar
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+    depends_on:
+      - sonarqube-db
+    networks:
+      - my-network
+
+volumes:
+  jenkins_home:
+  sonarqube_db_data:
+  sonarqube_data:
+  sonarqube_extensions:
 
 networks:
   my-network:
     driver: bridge
-
-volumes:
-  jenkins_home:
