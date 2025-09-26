@@ -25,6 +25,5 @@ pipeline:
 
     - stage: Deploy to Prod (Simulated)
       steps:
-        - echo: "Simulating deployment to PRDD environment at ${env.PROD_SERVER}..."
+        - echo: "Simulating deployment to PROD environment at ${env.PROD_SERVER}..."
         - sh: 'echo "Simulated: Deploying to Prod environment"'
-
