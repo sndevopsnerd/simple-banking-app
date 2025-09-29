@@ -7,7 +7,7 @@ pipeline {
         
         // --- ServiceNow Credentials & API ---
         // Credential ID for the Secret Token (ensure this ID exists in Jenkins Credentials Manager)
-        SN_TOKEN_ID = 'servicenow-api-token'
+        SN_TOKEN_ID = 'sn-api-token'
         // ServiceNow DevOps API URL
         SN_API_URL = 'https://dev197804.service-now.com/api/sn_devops/v2/devops/tool/orchestration?toolId=5c1dd70cc3d0f6108ce8fc0ed40131fd'
     }
