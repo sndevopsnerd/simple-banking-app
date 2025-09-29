@@ -2,11 +2,13 @@ pipeline {
     agent any
     
     environment {
-        // SonarQube project key for the analysis report
+        // --- SonarQube Configuration ---
         SONAR_PROJECT_KEY = 'simple-banking-app'
         
-        // Credentials ID for connecting to ServiceNow (ensure this ID exists in Jenkins Credentials Manager)
-        SN_CREDS_ID = 'servicenow-api-creds' // Placeholder for your actual credential ID
+        // --- ServiceNow Credentials & API ---
+        // Credential ID for the Secret Token (ensure this ID exists in Jenkins Credentials Manager)
+        SN_TOKEN_ID = 'servicenow-api-token'
+        // ServiceNow DevOps API URL
         SN_API_URL = 'https://dev197804.service-now.com/api/sn_devops/v2/devops/tool/orchestration?toolId=5c1dd70cc3d0f6108ce8fc0ed40131fd'
     }
     
@@ -28,7 +30,7 @@ pipeline {
         stage('Run Tests (Simulated)') {
             steps {
                 echo 'Running tests...'
-                // Create a simulated JUnit report file for later steps (like qTest)
+                // Creates a simulated JUnit report file for later stages if needed
                 sh 'mkdir -p target/surefire-reports && echo "<testsuite/>" > target/surefire-reports/TEST-Simulated.xml'
             }
         }
@@ -37,7 +39,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 echo 'Starting SonarQube Code Analysis...'
-                // The 'withSonarQubeEnv' step injects the URL and credentials for 'SonarQube Local'.
+                // The 'withSonarQubeEnv' step injects the configured SonarQube server details.
                 // You MUST configure a SonarQube server named 'SonarQube Local' in Manage Jenkins > Configure System.
                 withSonarQubeEnv('SonarQube Local') { 
                     // This runs the SonarQube Scanner executable (Name: SonarScanner in Global Tool Config)
@@ -46,24 +48,22 @@ pipeline {
             }
         }
         // --- END SONARQUBE ANALYSIS ---
-        
-        // --- QTEST / TEST PUBLISHING (Conceptual) ---
-        stage('Publish Test Results') {
-            steps {
-                echo 'Publishing test results to external QM tool (e.g., qTest)...'
-                // You would typically use the official qTest plugin step here:
-                // qTestUploader credentialsId: 'qtest-creds', results: 'target/surefire-reports/*.xml'
-                sh 'echo "Simulated: Uploaded test results to qTest"'
-            }
-        }
-        
+
         stage('Deploy to Dev (Simulated)') {
             steps {
-                echo 'Simulating Deployment to Dev.......'
+                echo 'Simulating Deployment to Dev...'
                 sh 'echo "Deployment successful"'
             }
         }
     }
     
-
+    post {
+        failure {
+            echo 'Pipeline failed. Notifying ServiceNow about the failure...'
+            // Uses Secret Text credential (your bearer token) to send authenticated request
+            withCredentials([string(credentialsId: SN_TOKEN_ID, variable: 'SN_TOKEN')]) {
+                sh 'curl -X POST -H "Authorization: Bearer ${SN_TOKEN}" "${SN_API_URL}"'
+            }
+        }
+    }
 }
