@@ -40,13 +40,18 @@ pipeline {
             steps {
                 echo 'Starting SonarQube Code Analysis...'
                 
-                // 1. Install the scanner tool and add its /bin directory to the PATH for this block
-                def scannerHome = tool 'SonarScanner' 
+                // FIX: Wrap Groovy variable declaration in a script block
+                script {
+                    def scannerHome = tool 'SonarScanner' 
+                    env.SONAR_SCANNER_HOME = scannerHome
+                }
                 
-                // 2. Inject environment variables and run the scanner
+                // The withSonarQubeEnv step implicitly adds the tool to the path for its block, 
+                // but we also ensure the path is set via env for safety.
                 withSonarQubeEnv('SonarQube Local') { 
-                    // This command uses the scanner located via the 'tool' step
-                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${SONAR_PROJECT_KEY} -Dsonar.sources=."
+                    // This command now uses the environment variable or the tool step's influence
+                    // to find the scanner executable.
+                    sh "${env.SONAR_SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=${SONAR_PROJECT_KEY} -Dsonar.sources=."
                 }
             }
         }
