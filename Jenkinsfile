@@ -34,7 +34,15 @@ pipeline {
                 sh 'mkdir -p target/surefire-reports && echo "<testsuite/>" > target/surefire-reports/TEST-Simulated.xml'
             }
         }
-        
+        stage('Diagnostic Check') {
+            steps {
+                echo 'Checking workspace contents before SonarScanner execution...'
+                // This command lists all files and permissions in the workspace
+                sh 'ls -la' 
+                // This command specifically checks the permissions and existence of the downloaded scanner
+                sh 'ls -la /usr/local/bin/sonar-scanner || echo "Sonar-scanner not in /usr/local/bin"'
+            }
+        }
         // --- SONARQUBE ANALYSIS ---
         stage('SonarQube Analysis') {
             steps {
@@ -57,12 +65,12 @@ pipeline {
         }
     }
     
-    post {
+   post {
         failure {
             echo 'Pipeline failed. Notifying ServiceNow about the failure...'
-            // Uses Secret Text credential (your bearer token) to send authenticated request
             withCredentials([string(credentialsId: SN_TOKEN_ID, variable: 'SN_TOKEN')]) {
-                sh 'curl -X POST -H "Authorization: Bearer ${SN_TOKEN}" "${SN_API_URL}"'
+                // Correctly format the Authorization header value with the variable
+                sh "curl -X POST -H \"Authorization: Bearer ${SN_TOKEN}\" \"${SN_API_URL}\""
             }
         }
     }
