@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the code from the repository using Jenkins' SCM configuration
+                // Checjjkout the code from the repository using Jenkins' SCM configuration
                 checkout scm
             }
         }
